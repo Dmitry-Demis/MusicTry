@@ -19,13 +19,83 @@ namespace MusicTry
         public MusicContext()
         {
 
-            Database.EnsureCreated();
-            ChangeTracker.LazyLoadingEnabled = false;
+           // Database.EnsureCreated();
+           // ChangeTracker.LazyLoadingEnabled = false;
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Указываем использование SQLite
             optionsBuilder.UseSqlite("Data Source=music.db");
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Настройка таблицы Artist
+            modelBuilder.Entity<Artist>(entity =>
+            {
+                entity.HasKey(a => a.Id); // Установка первичного ключа
+                entity.Property(a => a.Name).IsRequired(); // Название артиста обязательно
+                entity.HasOne(a => a.Genre) // Настройка отношения 1:M с Genre
+                      .WithMany(g => g.Artists)
+                      .HasForeignKey("GenreId"); // Имя внешнего ключа в таблице Artist
+
+                // Настройка отношения 1:M с Album
+                entity.HasMany(a => a.Albums)
+                      .WithOne(a => a.Artist)
+                      .HasForeignKey("ArtistId"); // Имя внешнего ключа в таблице Album
+            });
+
+            // Настройка таблицы Genre
+            modelBuilder.Entity<Genre>(entity =>
+            {
+                entity.HasKey(g => g.Id); // Установка первичного ключа
+                entity.Property(g => g.Name).IsRequired(); // Название жанра обязательно
+            });
+
+            // Настройка таблицы Album
+            modelBuilder.Entity<Album>(entity =>
+            {
+                entity.HasKey(a => a.Id); // Установка первичного ключа
+                entity.Property(a => a.Title).IsRequired(); // Название альбома обязательно
+                entity.HasOne(a => a.Artist) // Настройка отношения 1:M с Artist
+                      .WithMany(a => a.Albums)
+                      .HasForeignKey("ArtistId"); // Имя внешнего ключа в таблице Album
+
+                // Настройка отношения 1:M с Track
+                entity.HasMany(a => a.Tracks)
+                      .WithOne(t => t.Album)
+                      .HasForeignKey("AlbumId"); // Имя внешнего ключа в таблице Track
+            });
+
+            // Настройка таблицы Track
+            modelBuilder.Entity<Track>(entity =>
+            {
+                entity.HasKey(t => t.Id); // Установка первичного ключа
+                entity.Property(t => t.Title).IsRequired(); // Название трека обязательно
+                entity.Property(t => t.Duration).IsRequired(); // Длительность трека обязательна
+            });
+
+            // Настройка таблицы Compilation
+            modelBuilder.Entity<Compilation>(entity =>
+            {
+                entity.HasKey(c => c.Id); // Установка первичного ключа
+                entity.Property(c => c.Title).IsRequired(); // Название сборника обязательно
+
+                // Настройка отношения M:N с Track
+                entity.HasMany(c => c.Tracks)
+                      .WithMany() // Без навигационного свойства в Track
+                      .UsingEntity<Dictionary<string, object>>(
+                          "CompilationTrack", // Имя промежуточной таблицы
+                          j => j
+                              .HasOne<Track>()
+                              .WithMany()
+                              .HasForeignKey("TrackId")
+                              .OnDelete(DeleteBehavior.Cascade),
+                          j => j
+                              .HasOne<Compilation>()
+                              .WithMany()
+                              .HasForeignKey("CompilationId")
+                              .OnDelete(DeleteBehavior.Cascade));
+            });
         }
     }
 
