@@ -31,6 +31,7 @@
         <StackPanel Grid.Column="0" Background="#0D47A1" VerticalAlignment="Stretch">
             <Button Content="Создать" Click="OnSaveButtonClick"/>
             <Button Content="Артисты" Click="OnArtistButtonClick"/>
+            <Button Content="Альбомы" Click="OnAlbumsButtonClick"/>
         </StackPanel>
     </Grid>
 </Window>

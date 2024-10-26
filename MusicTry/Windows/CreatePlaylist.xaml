@@ -31,15 +31,16 @@
                 <DataGridTemplateColumn Header="X" Width="20">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsSelected}"/>
+                            <CheckBox IsChecked="{Binding IsSelected}" Click="CheckBox_Click"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="*"/>
-                <DataGridTextColumn Header="Альбом" Binding="{Binding Album.Title}" Width="*"/>
-                <DataGridTextColumn Header="Длительность" Binding="{Binding Duration}" Width="*"/>
-                <DataGridTextColumn Header="Исполнитель" Binding="{Binding Artist.Name}" Width="*"/>
-                <DataGridTextColumn Header="Жанр" Binding="{Binding Genre.Name}" Width="*"/>
+
+                <DataGridTextColumn Header="Название" Binding="{Binding Track.Title}" Width="*"/>
+                <DataGridTextColumn Header="Альбом" Binding="{Binding Track.Album.Title}" Width="*"/>
+                <DataGridTextColumn Header="Длительность" Binding="{Binding Track.Duration}" Width="*"/>
+                <DataGridTextColumn Header="Исполнитель" Binding="{Binding Track.Album.Artist.Name}" Width="*"/>
+                <DataGridTextColumn Header="Жанр" Binding="{Binding Track.Album.Genre.Name}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 

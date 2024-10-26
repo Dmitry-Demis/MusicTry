@@ -44,7 +44,6 @@
 
         public Album Build()
         {
-            // Здесь можно добавить проверку на наличие обязательных полей
             if (string.IsNullOrWhiteSpace(_title))
                 throw new InvalidOperationException("Title must be set.");
             if (_artist is null)
@@ -60,6 +59,5 @@
             };
         }
     }
-
 
 }

@@ -1,68 +1,95 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace MusicTry.Windows
 {
     public partial class AlbumWindow : Window
     {
-        private readonly Artist _artist;
+        private readonly List<Artist> _artists; // Хранит список артистов
+        private readonly Artist _selectedArtist; // Хранит выбранного артиста
 
         public AlbumWindow(Artist artist)
         {
             InitializeComponent();
-            _artist = artist;
-            Title = $"Альбомы исполнителя: {_artist.Name}";
-            LoadAlbums();
+            _selectedArtist = artist;
+            Title = $"Альбомы исполнителя: {_selectedArtist.Name}";
+            LoadAlbumsForArtist();
         }
 
-        private async void LoadAlbums()
+        public AlbumWindow(List<Artist> artists)
+        {
+            InitializeComponent();
+            _artists = artists;
+            Title = "Альбомы всех исполнителей";
+            LoadAlbumsForAllArtists();
+        }
+
+        private async void LoadAlbumsForArtist()
         {
             try
             {
-                // Получаем альбомы исполнителя из БД
-                var albums = await DatabaseService.GetAlbumsByArtistAsync(_artist);
+                var albums = await DatabaseService.GetAlbumsByArtistAsync(_selectedArtist);
                 AlbumListBox.ItemsSource = albums;
 
-                // Устанавливаем выбор первого альбома, если он есть
                 if (albums.Count > 0)
                 {
-                    AlbumListBox.SelectedIndex = 0; // Выбор первого альбома
+                    AlbumListBox.SelectedIndex = 0;
                 }
             }
             catch (Exception ex)
             {
-                // Обработка ошибок (например, показать сообщение об ошибке)
+                MessageBox.Show($"Ошибка загрузки альбомов: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void LoadAlbumsForAllArtists()
+        {
+            try
+            {
+                var albums = new List<Album>();
+                foreach (var artist in _artists)
+                {
+                    var artistAlbums = await DatabaseService.GetAlbumsByArtistAsync(artist);
+                    albums.AddRange(artistAlbums);
+                }
+
+                AlbumListBox.ItemsSource = albums;
+
+                if (albums.Count > 0)
+                {
+                    AlbumListBox.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show($"Ошибка загрузки альбомов: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private async void AlbumListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Проверяем, что выбран альбом
             if (AlbumListBox.SelectedItem is Album selectedAlbum)
             {
                 try
                 {
-                    // Получаем список треков выбранного альбома
                     var tracks = await DatabaseService.GetTracksByAlbumAsync(selectedAlbum);
-
-                    // Нумерация треков (проверка для избежания ошибок)
                     for (int i = 0; i < tracks.Count; i++)
                     {
-                        tracks[i].Id = i + 1; // Устанавливаем номер трека
+                        tracks[i].Id = i + 1;
                     }
 
-                    TrackDataGrid.ItemsSource = tracks; // Обновляем таблицу треков
+                    TrackDataGrid.ItemsSource = tracks;
                 }
                 catch (Exception ex)
                 {
-                    // Обработка ошибок (например, показать сообщение об ошибке)
                     MessageBox.Show($"Ошибка загрузки треков: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else
             {
-                TrackDataGrid.ItemsSource = null; // Сбрасываем таблицу, если ничего не выбрано
+                TrackDataGrid.ItemsSource = null;
             }
         }
     }

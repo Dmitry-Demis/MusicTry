@@ -110,6 +110,15 @@ namespace MusicTry
                                  .Include(track => track.Album)   // подгружаем альбом, если нужен доступ к полям
                                  .ToListAsync();
         }
+        public static async Task<List<Track>> GetTracksAsync()
+        {
+            return await _context.Tracks
+                .Include(t => t.Album)
+                .Include(t => t.Album.Artist)
+                .Include(t => t.Album.Genre)
+                .ToListAsync();
+        }
+
     }
 
 }

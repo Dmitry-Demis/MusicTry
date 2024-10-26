@@ -33,5 +33,12 @@ namespace MusicTry
             var artistWindow = new ArtistWindow();
             artistWindow.ShowDialog();
         }
+
+        private void OnAlbumsButtonClick(object sender, RoutedEventArgs e)
+        {
+            var allArtists = DatabaseService.GetArtistsAsync().Result;
+            var albumWindow = new AlbumWindow(allArtists);
+            albumWindow.ShowDialog();
+        }
     }
 }
