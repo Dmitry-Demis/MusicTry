@@ -118,6 +118,18 @@ namespace MusicTry
                 .Include(t => t.Album.Genre)
                 .ToListAsync();
         }
+        public static async Task<List<Compilation>> GetPlaylistsAsync()
+        {
+            return await _context.Compilations
+                .Include(playlist => playlist.Tracks)
+                    .ThenInclude(track => track.Album) // Включаем альбомы для треков
+                        .ThenInclude(album => album.Genre) // Включаем жанры для альбомов
+                .Include(playlist => playlist.Tracks)
+                    .ThenInclude(track => track.Album)
+                        .ThenInclude(album => album.Artist) // Включаем артистов для альбомов
+                .ToListAsync();
+        }
+
 
     }
 

@@ -79,7 +79,7 @@ namespace MusicTry.Windows
                         HorizontalAlignment = HorizontalAlignment.Center,
                         VerticalAlignment = VerticalAlignment.Center,
                         TextWrapping = TextWrapping.Wrap,
-                        TextAlignment = TextAlignment.Center
+                        TextAlignment = TextAlignment.Center,
                     },
                     Tag = artist // Сохраняем объект артиста в свойстве Tag, чтобы можно было к нему обратиться при нажатии
                 };

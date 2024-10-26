@@ -40,5 +40,11 @@ namespace MusicTry
             var albumWindow = new AlbumWindow(allArtists);
             albumWindow.ShowDialog();
         }
+
+        private void OnPlaylistsButtonClick(object sender, RoutedEventArgs e)
+        {
+            var playlistWindow = new PlaylistWindow();
+            playlistWindow.ShowDialog();
+        }
     }
 }
