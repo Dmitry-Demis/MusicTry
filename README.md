@@ -10,7 +10,7 @@
 
 ## Создать альбом
 
-![image](https://github.com/user-attachments/assets/dce34000-32f8-45b6-a006-cd8b3744b1fa)
+![image](https://github.com/user-attachments/assets/92175d01-d254-4fee-af1b-c38e89b972a4)
 
 1. Введите название альбома
 2. Выберите исполнителя из списка
@@ -23,8 +23,36 @@
 
 ## Создать плейлист
 
-![image](https://github.com/user-attachments/assets/b82ca6a0-3649-41db-9ff1-d4f97e532c7b)
+![image](https://github.com/user-attachments/assets/8ef7e3b7-0db1-4f2c-a61b-957c89ec1595)
+
 
 1. Нужно задать название плейлиста
 2. Поиск работает от поля Название до поля Жанр (можно искать что-то из этого)
 3. В таблице можно выбрать в первом столбце галочки
+
+# Артисты
+
+![image](https://github.com/user-attachments/assets/d567140f-6fd7-4ebe-a437-21dd2918f4a3)
+
+Можно выбрать любого, работает поиск. При нажатии откроется откно с альбомами и треками.
+
+![image](https://github.com/user-attachments/assets/7b99efd2-4d18-42c4-80a0-490d728b32e3)
+
+В альбомах работает поиск и в треках работает поиск
+
+# Альбомы
+
+Показываются все существующие альбомы исполнителей
+
+![image](https://github.com/user-attachments/assets/15c4b893-e57a-4be2-8162-e125c7189432)
+
+# Плейлисты
+
+Показываются все созданные плейлисты
+
+![image](https://github.com/user-attachments/assets/1d7c9b32-8c3c-4507-835a-707ba459037e)
+
+Есть поиск
+
+![image](https://github.com/user-attachments/assets/682ea14a-f41a-4bc9-8582-6ed611e5b695)
+
