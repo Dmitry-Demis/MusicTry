@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using MusicTry.Windows;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,32 +23,15 @@ namespace MusicTry
         }
         private async void OnSaveButtonClick(object sender, RoutedEventArgs e)
         {
-            // Получаем значения из полей
-            string name = "Martin Garrix";
+            // Открыть окно создания
+            var createWindow = new CreateWindow();
+            createWindow.ShowDialog();
+        }
 
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                MessageBox.Show("Пожалуйста, заполните все поля.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            Genre selectedGenre = new() { Name = "ds" };
-            // Создаём и сохраняем артиста
-            var artist = new ArtistBuilder()
-                .SetName(name)
-                .SetGenre(selectedGenre)
-                .Build();
-            var album = new AlbumBuilder()
-                .SetTitle("Gello")
-                .SetArtist(artist)
-
-
-                .Build();
-
-            await DatabaseService.SaveArtistAsync(artist);
-
-
-            MessageBox.Show("Артист успешно сохранён!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+        private void OnArtistButtonClick(object sender, RoutedEventArgs e)
+        {
+            var artistWindow = new ArtistWindow();
+            artistWindow.ShowDialog();
         }
     }
 }

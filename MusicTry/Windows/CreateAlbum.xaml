@@ -1,0 +1,120 @@
+﻿<Window x:Class="MusicTry.Windows.CreateAlbum"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:MusicTry.Windows"
+        Title="Создать Альбом" Height="600" Width="600"
+        Background="#E6F0FA">
+    <Window.Resources>
+        <local:CountToBooleanConverter x:Key="CountToBooleanConverter"/>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <!-- Новая строка для трека -->
+            <RowDefinition Height="*"/>
+            <!-- Для вложенного грид -->
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Название Альбома -->
+        <TextBlock Text="Название Альбома:" VerticalAlignment="Center"/>
+        <TextBox x:Name="AlbumTitleTextBox" Margin="5" Grid.Column="1"/>
+
+        <!-- Исполнитель -->
+        <TextBlock Text="Исполнитель:" VerticalAlignment="Center" Grid.Row="1"/>
+        <ComboBox x:Name="ArtistComboBox" Margin="5" Grid.Column="1" Grid.Row="1"/>
+
+        <!-- Жанр -->
+        <TextBlock Text="Жанр:" VerticalAlignment="Center" Grid.Row="2"/>
+        <ComboBox x:Name="GenreComboBox" Margin="5" Grid.Column="1" Grid.Row="2"/>
+
+        <!-- Дата выпуска -->
+        <TextBlock Text="Дата выпуска:" VerticalAlignment="Center" Grid.Row="3"/>
+        <DatePicker x:Name="ReleaseDatePicker" Margin="5" Grid.Column="1" Grid.Row="3"/>
+
+        <!-- Название Трека -->
+        <TextBlock Text="Название Трека:" VerticalAlignment="Center" Grid.Row="4"/>
+        <TextBox x:Name="TrackTitleTextBox" Margin="5" Grid.Column="1" Grid.Row="4"/>
+
+        <!-- Время Трека -->
+        <TextBlock Text="Время Трека:" VerticalAlignment="Center" Grid.Row="5"/>
+
+        <!-- Новый грид для времени -->
+        <Grid Grid.Row="5" Grid.Column="1" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Заголовки -->
+                <RowDefinition Height="Auto"/>
+                <!-- Поля ввода -->
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <!-- Колонка для минут -->
+                <ColumnDefinition Width="Auto"/>
+                <!-- Колонка для секунд -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Заголовки для минут и секунд -->
+            <TextBlock Text="Мин." VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,5,0" Grid.Row="0" Grid.Column="0"/>
+            <TextBlock Text="Сек." VerticalAlignment="Center" HorizontalAlignment="Center" Margin="5,0,0,0" Grid.Row="0" Grid.Column="1"/>
+
+            <!-- Поля ввода минут и секунд -->
+            <TextBox x:Name="TrackMinutesTextBox" Width="50" Margin="0,5,5,0" Grid.Row="1" Grid.Column="0"/>
+            <TextBox x:Name="TrackSecondsTextBox" Width="50" Margin="5,5,0,0" Grid.Row="1" Grid.Column="1" Text="0"/>
+        </Grid>
+
+        <!-- Вложенный грид для кнопок и таблицы -->
+        <Grid Grid.Row="6" Grid.ColumnSpan="2" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Для кнопок -->
+                <RowDefinition Height="*"/>
+                <!-- Для таблицы -->
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <!-- Ширина для кнопок -->
+                <ColumnDefinition Width="*"/>
+                <!-- Ширина для таблицы -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Кнопка Создать Трек -->
+            <Button Content="Создать Трек" Grid.Row="0" Grid.Column="0" Click="AddTrackButton_Click" Width="200" Background="#FF9800" Foreground="White" Margin="5"/>
+
+            <!-- Кнопка Создать Альбом -->
+            <Button Content="Создать Альбом" 
+                    Grid.Row="0" Grid.Column="1" 
+                    Click="CreateAlbumButton_Click" 
+                    Width="200" 
+                    Background="#2196F3" 
+                    Foreground="White" 
+                    Margin="5"
+                    IsEnabled="{Binding ElementName=TracksDataGrid, Path=Items.Count, Converter={StaticResource CountToBooleanConverter}}"/>
+
+            <!-- Таблица для отображения треков -->
+            <DataGrid x:Name="TracksDataGrid" Grid.Row="1" Grid.ColumnSpan="2" Margin="5" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="*"/>
+                    <!-- Идентификатор трека -->
+                    <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="*"/>
+                    <!-- Название трека -->
+                    <DataGridTextColumn Header="Альбом" Binding="{Binding Album.Title}" Width="*"/>
+                    <!-- Альбом -->
+                    <DataGridTextColumn Header="Длительность" Binding="{Binding Duration}" Width="*"/>
+                    <!-- Длительность трека -->
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,49 @@
+﻿<Window x:Class="MusicTry.Windows.CreatePlaylist"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Создать Плейлист" Height="600" Width="600"
+        Background="#E6F0FA">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Название плейлиста -->
+        <TextBlock Text="Название Плейлиста:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"/>
+        <TextBox x:Name="PlaylistNameTextBox" Margin="5" Grid.Row="0" Grid.Column="1"/>
+
+        <!-- Поиск по трекам -->
+        <TextBlock Text="Поиск по трекам:" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"/>
+        <TextBox x:Name="SearchTrackTextBox" Margin="5" Grid.Row="1" Grid.Column="1" KeyUp="SearchTrackTextBox_KeyUp" TextChanged="SearchTrackTextBox_TextChanged"/>
+        <!-- Add an event for search -->
+
+        <!-- Таблица треков -->
+        <DataGrid x:Name="TracksDataGrid" Grid.Row="2" Grid.ColumnSpan="2" Margin="5" AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="X" Width="20">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsSelected}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="*"/>
+                <DataGridTextColumn Header="Альбом" Binding="{Binding Album.Title}" Width="*"/>
+                <DataGridTextColumn Header="Длительность" Binding="{Binding Duration}" Width="*"/>
+                <DataGridTextColumn Header="Исполнитель" Binding="{Binding Artist.Name}" Width="*"/>
+                <DataGridTextColumn Header="Жанр" Binding="{Binding Genre.Name}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Кнопка для создания плейлиста -->
+        <Button Content="Создать Плейлист" Grid.Row="3" Grid.ColumnSpan="2" Width="200" Margin="5" Click="CreatePlaylistButton_Click"/>
+    </Grid>
+</Window>
