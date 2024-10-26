@@ -9,6 +9,7 @@ namespace MusicTry.Windows
     {
         private readonly List<Artist> _artists; // Хранит список артистов
         private readonly Artist _selectedArtist; // Хранит выбранного артиста
+        private List<Album> _allAlbums = new List<Album>();
 
         public AlbumWindow(Artist artist)
         {
@@ -31,8 +32,8 @@ namespace MusicTry.Windows
             try
             {
                 var albums = await DatabaseService.GetAlbumsByArtistAsync(_selectedArtist);
+                _allAlbums.AddRange(albums);
                 AlbumListBox.ItemsSource = albums;
-
                 if (albums.Count > 0)
                 {
                     AlbumListBox.SelectedIndex = 0;
@@ -48,16 +49,16 @@ namespace MusicTry.Windows
         {
             try
             {
-                var albums = new List<Album>();
+                _allAlbums = new List<Album>();
                 foreach (var artist in _artists)
                 {
                     var artistAlbums = await DatabaseService.GetAlbumsByArtistAsync(artist);
-                    albums.AddRange(artistAlbums);
+                    _allAlbums.AddRange(artistAlbums);
                 }
 
-                AlbumListBox.ItemsSource = albums;
+                AlbumListBox.ItemsSource = _allAlbums;
 
-                if (albums.Count > 0)
+                if (_allAlbums.Count > 0)
                 {
                     AlbumListBox.SelectedIndex = 0;
                 }
@@ -92,5 +93,48 @@ namespace MusicTry.Windows
                 TrackDataGrid.ItemsSource = null;
             }
         }
+
+        private void AlbumSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = AlbumSearchTextBox.Text.ToLower();
+
+            var filteredAlbums = _allAlbums
+                .Where(album => album.Title.ToLower().Contains(searchText))
+                .ToList();
+
+            AlbumListBox.ItemsSource = filteredAlbums;
+
+            if (filteredAlbums.Count > 0)
+            {
+                AlbumListBox.SelectedIndex = 0;
+            }
+            else
+            {
+                TrackDataGrid.ItemsSource = null;
+            }
+        }
+
+        private void TrackSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = TrackSearchTextBox.Text.ToLower();
+
+            if (AlbumListBox.SelectedItem is Album selectedAlbum)
+            {
+                var filteredTracks = selectedAlbum.Tracks
+                    .Where(track => track.Title.ToLower().Contains(searchText) ||
+                                    (track.Album?.Genre?.Name?.ToLower().Contains(searchText) ?? false) ||
+                                    track.Album.ReleaseDate.Contains(searchText) ||
+                                    track.Duration.ToString().Contains(searchText))
+                    .ToList();
+
+                TrackDataGrid.ItemsSource = filteredTracks;
+            }
+            else
+            {
+                TrackDataGrid.ItemsSource = null; // Сбрасываем таблицу, если альбом не выбран
+            }
+        }
+
+
     }
 }

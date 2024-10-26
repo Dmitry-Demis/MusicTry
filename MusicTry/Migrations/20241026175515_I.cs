@@ -5,7 +5,7 @@
 namespace MusicTry.Migrations
 {
     /// <inheritdoc />
-    public partial class I2 : Migration
+    public partial class I : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -84,8 +84,7 @@ namespace MusicTry.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     AlbumId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Duration = table.Column<double>(type: "REAL", nullable: false),
-                    CompilationId = table.Column<int>(type: "INTEGER", nullable: true)
+                    Duration = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,11 +95,30 @@ namespace MusicTry.Migrations
                         principalTable: "Albums",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CompilationTrack",
+                columns: table => new
+                {
+                    CompilationsId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TracksId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompilationTrack", x => new { x.CompilationsId, x.TracksId });
                     table.ForeignKey(
-                        name: "FK_Tracks_Compilations_CompilationId",
-                        column: x => x.CompilationId,
+                        name: "FK_CompilationTrack_Compilations_CompilationsId",
+                        column: x => x.CompilationsId,
                         principalTable: "Compilations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CompilationTrack_Tracks_TracksId",
+                        column: x => x.TracksId,
+                        principalTable: "Tracks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -114,27 +132,30 @@ namespace MusicTry.Migrations
                 column: "GenreId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CompilationTrack_TracksId",
+                table: "CompilationTrack",
+                column: "TracksId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tracks_AlbumId",
                 table: "Tracks",
                 column: "AlbumId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tracks_CompilationId",
-                table: "Tracks",
-                column: "CompilationId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "CompilationTrack");
+
+            migrationBuilder.DropTable(
+                name: "Compilations");
+
+            migrationBuilder.DropTable(
                 name: "Tracks");
 
             migrationBuilder.DropTable(
                 name: "Albums");
-
-            migrationBuilder.DropTable(
-                name: "Compilations");
 
             migrationBuilder.DropTable(
                 name: "Artists");

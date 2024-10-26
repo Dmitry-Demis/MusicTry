@@ -4,42 +4,45 @@
         Title="Альбомы" Height="450" Width="800"
         Background="#E6F0FA">
     <Grid>
-        <!-- Определение колонок: слева альбомы, справа таблица треков -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
-        <!-- Список альбомов -->
-        <ListBox x:Name="AlbumListBox" 
-                 Grid.Column="0" 
-                 Margin="10" 
-                 SelectionChanged="AlbumListBox_SelectionChanged"
-                 Background="#DCE6F1">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Title}" FontSize="16" Foreground="#333" Padding="5"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <!-- Панель для поля поиска и списка альбомов -->
+        <StackPanel Grid.Column="0" Margin="10" Background="#DCE6F1">
+            <TextBox x:Name="AlbumSearchTextBox"
+                     Margin="0,0,0,10"
+                     TextChanged="AlbumSearchTextBox_TextChanged"/>
+            <ListBox x:Name="AlbumListBox"
+                     SelectionChanged="AlbumListBox_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Title}" FontSize="16" Foreground="#333" Padding="5"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
 
-        <!-- Таблица треков выбранного альбома -->
-        <DataGrid x:Name="TrackDataGrid" 
-                  Grid.Column="1" 
-                  Margin="10" 
-                  AutoGenerateColumns="False" 
-                  HeadersVisibility="Column"
-                  Background="#F2F8FC"
-                  CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  IsReadOnly="True">
-            <!-- Запрет на редактирование строк -->
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="№" Binding="{Binding Id}" Width="40"/>
-                <DataGridTextColumn Header="Название трека" Binding="{Binding Title}" Width="*"/>
-                <DataGridTextColumn Header="Жанр" Binding="{Binding Album.Genre.Name}" Width="100"/>
-                <DataGridTextColumn Header="Длительность" Binding="{Binding Duration}" Width="100"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <!-- Таблица треков выбранного альбома с полем поиска -->
+        <StackPanel Grid.Column="1" Margin="10">
+            <TextBox x:Name="TrackSearchTextBox"
+                     Margin="0,0,0,10"
+                     TextChanged="TrackSearchTextBox_TextChanged"/>
+            <DataGrid x:Name="TrackDataGrid" 
+                      AutoGenerateColumns="False" 
+                      HeadersVisibility="Column"
+                      Background="#F2F8FC"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="№" Binding="{Binding Id}" Width="40"/>
+                    <DataGridTextColumn Header="Название трека" Binding="{Binding Title}" Width="*"/>
+                    <DataGridTextColumn Header="Жанр" Binding="{Binding Album.Genre.Name}" Width="100"/>
+                    <DataGridTextColumn Header="Длительность" Binding="{Binding Duration}" Width="100"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
     </Grid>
 </Window>

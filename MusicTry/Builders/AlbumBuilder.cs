@@ -2,11 +2,11 @@
 {
     public class AlbumBuilder : IBuilder<Album>
     {
-        private string _title = string.Empty; // Инициализация с пустой строкой
-        private Artist _artist = null!; // Используем null-символ для указания, что это значение будет установлено
-        private Genre _genre = null!; // Используем null-символ для указания, что это значение будет установлено
-        private readonly List<Track> _tracks = []; // Используем List вместо []
-        private string _releaseDate = string.Empty; // Инициализация минимальным значением
+        private string _title = string.Empty;
+        private Artist _artist = null!;
+        private Genre _genre = null!;
+        private readonly List<Track> _tracks = [];
+        private string _releaseDate = string.Empty;
 
         public AlbumBuilder SetTitle(string title)
         {

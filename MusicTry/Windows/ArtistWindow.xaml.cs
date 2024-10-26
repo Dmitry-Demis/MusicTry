@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -9,6 +11,7 @@ namespace MusicTry.Windows
     public partial class ArtistWindow : Window
     {
         private static readonly Random Random = new Random();
+        private List<Artist> _allArtists;
 
         public ArtistWindow()
         {
@@ -18,7 +21,46 @@ namespace MusicTry.Windows
 
         private async void LoadArtists()
         {
-            var artists = await DatabaseService.GetArtistsAsync();
+            _allArtists = await DatabaseService.GetArtistsAsync();
+
+            UpdateArtistDisplay(_allArtists); // Отображаем всех артистов сразу
+        }
+
+        private void ArtistButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is Artist artist)
+            {
+                // Открытие окна альбомов для выбранного артиста
+                var albumWindow = new AlbumWindow(artist);
+                albumWindow.ShowDialog();
+            }
+        }
+
+        private Color GetRandomColour()
+        {
+            // Генерация случайного цвета
+            return Color.FromRgb(
+                (byte)Random.Next(100, 256),
+                (byte)Random.Next(100, 256),
+                (byte)Random.Next(100, 256)
+            );
+        }
+
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = SearchTextBox.Text.ToLower();
+
+            // Фильтруем артистов по имени
+            var filteredArtists = _allArtists
+                .Where(artist => artist.Name.ToLower().Contains(searchText))
+                .ToList();
+
+            UpdateArtistDisplay(filteredArtists);
+        }
+
+        private void UpdateArtistDisplay(List<Artist> artists)
+        {
+            ArtistWrapPanel.Children.Clear(); // Очищаем текущий список
 
             foreach (var artist in artists)
             {
@@ -47,26 +89,6 @@ namespace MusicTry.Windows
 
                 ArtistWrapPanel.Children.Add(artistButton);
             }
-        }
-
-        private void ArtistButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button && button.Tag is Artist artist)
-            {
-                // Открытие окна альбомов для выбранного артиста
-                var albumWindow = new AlbumWindow(artist);
-                albumWindow.ShowDialog();
-            }
-        }
-
-        private Color GetRandomColour()
-        {
-            // Генерация случайного цвета
-            return Color.FromRgb(
-                (byte)Random.Next(100, 256),
-                (byte)Random.Next(100, 256),
-                (byte)Random.Next(100, 256)
-            );
         }
     }
 }

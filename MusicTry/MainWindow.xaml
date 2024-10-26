@@ -32,6 +32,7 @@
             <Button Content="Создать" Click="OnSaveButtonClick"/>
             <Button Content="Артисты" Click="OnArtistButtonClick"/>
             <Button Content="Альбомы" Click="OnAlbumsButtonClick"/>
+            <Button Content="Плейлисты" Click="OnPlaylistsButtonClick"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,7 @@ namespace MusicTry
             // Указываем использование SQLite
             if (!optionsBuilder.IsConfigured)
             {
+                string currentDirectory = Directory.GetCurrentDirectory();
                 optionsBuilder.UseSqlite("Data Source=C:\\TEMP\\music.db");
             }
         }

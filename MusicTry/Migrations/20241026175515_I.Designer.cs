@@ -11,14 +11,29 @@ using MusicTry;
 namespace MusicTry.Migrations
 {
     [DbContext(typeof(MusicContext))]
-    [Migration("20241026125519_I2")]
-    partial class I2
+    [Migration("20241026175515_I")]
+    partial class I
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
+
+            modelBuilder.Entity("CompilationTrack", b =>
+                {
+                    b.Property<int>("CompilationsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TracksId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CompilationsId", "TracksId");
+
+                    b.HasIndex("TracksId");
+
+                    b.ToTable("CompilationTrack");
+                });
 
             modelBuilder.Entity("MusicTry.Album", b =>
                 {
@@ -103,9 +118,6 @@ namespace MusicTry.Migrations
                     b.Property<int>("AlbumId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CompilationId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<double>("Duration")
                         .HasColumnType("REAL");
 
@@ -117,9 +129,22 @@ namespace MusicTry.Migrations
 
                     b.HasIndex("AlbumId");
 
-                    b.HasIndex("CompilationId");
-
                     b.ToTable("Tracks");
+                });
+
+            modelBuilder.Entity("CompilationTrack", b =>
+                {
+                    b.HasOne("MusicTry.Compilation", null)
+                        .WithMany()
+                        .HasForeignKey("CompilationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MusicTry.Track", null)
+                        .WithMany()
+                        .HasForeignKey("TracksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MusicTry.Album", b =>
@@ -147,10 +172,6 @@ namespace MusicTry.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MusicTry.Compilation", null)
-                        .WithMany("Tracks")
-                        .HasForeignKey("CompilationId");
-
                     b.Navigation("Album");
                 });
 
@@ -162,11 +183,6 @@ namespace MusicTry.Migrations
             modelBuilder.Entity("MusicTry.Artist", b =>
                 {
                     b.Navigation("Albums");
-                });
-
-            modelBuilder.Entity("MusicTry.Compilation", b =>
-                {
-                    b.Navigation("Tracks");
                 });
 #pragma warning restore 612, 618
         }

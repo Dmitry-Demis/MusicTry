@@ -2,9 +2,9 @@
 {
     public class TrackBuilder : IBuilder<Track>
     {
-        private string _title = string.Empty; // Инициализация с пустой строкой
-        private double _duration; // Инициализация длительности трека
-        private Album _album = null!; // Альбом, к которому относится трек
+        private string _title = string.Empty;
+        private double _duration;
+        private Album _album = null!;
 
         public TrackBuilder SetTitle(string title)
         {
@@ -14,7 +14,6 @@
 
         public TrackBuilder SetDuration(double minutes, double seconds)
         {
-            // Преобразование времени в секунды
             _duration = (minutes * 60) + seconds;
             return this;
         }
@@ -27,7 +26,6 @@
 
         public Track Build()
         {
-            // Проверка на наличие обязательных полей
             if (string.IsNullOrWhiteSpace(_title))
                 throw new InvalidOperationException("Title must be set.");
             if (_album is null)

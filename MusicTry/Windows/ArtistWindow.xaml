@@ -5,7 +5,15 @@
         Height="400" Width="600"
         Background="#F0F4F8"
         WindowStartupLocation="CenterScreen">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <WrapPanel x:Name="ArtistWrapPanel" Margin="10" />
-    </ScrollViewer>
+    <StackPanel>
+        <!-- Поле для поиска -->
+        <TextBox x:Name="SearchTextBox" 
+                 Margin="10" 
+                 Padding="5" 
+                 TextChanged="SearchTextBox_TextChanged" />
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <WrapPanel x:Name="ArtistWrapPanel" Margin="10" />
+        </ScrollViewer>
+    </StackPanel>
 </Window>
